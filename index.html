@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Bingo Musical de Cumpleaños 🎉</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap');
+  body {
+    font-family: 'Comic Neue', cursive, sans-serif;
+    background: linear-gradient(135deg, #ffc0cb, #fff0f5);
+    color: #b33939;
+    margin: 0; padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+  }
+  h1 {
+    margin: 20px;
+    font-size: 2.5rem;
+    color: #d6336c;
+    text-shadow: 1px 1px 2px #fff;
+  }
+  #form-section {
+    background: #ffe4e1cc;
+    border-radius: 15px;
+    padding: 25px;
+    width: 320px;
+    box-shadow: 0 0 15px #f08080cc;
+    margin-bottom: 30px;
+  }
+  label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 6px;
+    color: #a83256;
+  }
+  input[type="text"] {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1.5px solid #d6336c;
+    outline: none;
+    transition: 0.3s;
+  }
+  input[type="text"]:focus {
+    border-color: #ff69b4;
+    box-shadow: 0 0 5px #ff69b4aa;
+  }
+  button {
+    margin-top: 15px;
+    background: #d6336c;
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    box-shadow: 0 5px 10px #d6336caa;
+    transition: 0.3s;
+  }
+  button:hover {
+    background: #ff69b4;
+    box-shadow: 0 8px 15px #ff69b4cc;
+  }
+  #rules {
+    text-align: left;
+    font-size: 0.9rem;
+    background: #fff0f5cc;
+    padding: 10px 15px;
+    border-radius: 10px;
+    margin-top: 10px;
+    color: #800040;
+  }
+  #bingo-section {
+    display: none;
+    width: 90vw;
+    max-width: 640px;
+    margin-bottom: 30px;
+  }
+  #player-name {
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: #d6336c;
+    margin-bottom: 10px;
+  }
+  #fun-phrase {
+    font-style: italic;
+    margin-bottom: 15px;
+    color: #a83256;
+    min-height: 28px;
+  }
+  #bingo-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 8px;
+  }
+  .cell {
+    background: #fff;
+    border: 3px solid #ffb6c1;
+    border-radius: 12px;
+    padding: 10px;
+    text-align: center;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+    box-shadow: 0 4px 8px #ffb6c180;
+    transition: all 0.3s ease;
+    position: relative;
+    font-size: 0.9rem;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #b33939;
+  }
+  .cell.selected {
+    background: #ff69b4cc;
+    color: white;
+    border-color: #ff1493;
+    text-decoration: line-through;
+    opacity: 0.6;
+  }
+  .cell.free {
+    background: #fff0f5;
+    border-color: #ff69b4;
+    cursor: default;
+    font-weight: 700;
+    color: #d6336c;
+  }
+  #bingo-message {
+    font-size: 3rem;
+    color: #d6336c;
+    text-shadow: 0 0 15px #ff69b4cc;
+    font-weight: 900;
+    margin-top: 20px;
+    display: none;
+  }
+  #stickers {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    pointer-events: none;
+  }
+  .sticker {
+    width: 50px;
+    opacity: 0.7;
+    margin: 5px;
+    animation: floaty 4s ease-in-out infinite;
+  }
+  .sticker:nth-child(2) {
+    animation-delay: 2s;
+    width: 40px;
+  }
+  .sticker:nth-child(3) {
+    animation-delay: 1s;
+    width: 45px;
+  }
+  @keyframes floaty {
+    0%, 100% { transform: translateY(0px);}
+    50% { transform: translateY(-15px);}
+  }
+</style>
+</head>
+<body>
+
+<h1>Bingo Musical de Cumpleaños 🎉</h1>
+
+<div id="form-section">
+  <label for="playerName">Ingresa tu nombre para jugar:</label>
+  <input type="text" id="playerName" placeholder="Tu nombre aquí..." />
+  <div id="rules">
+    <strong>Reglas del Bingo:</strong>
+    <ul>
+      <li>Escuchá la canción y si está en tu cartón, clickeá para marcar.</li>
+      <li>Podés desmarcar haciendo clic otra vez si te equivocaste.</li>
+      <li>Completa TODAS las filas para hacer BINGO.</li>
+      <li>¡Divertite!</li>
+    </ul>
+  </div>
+  <button id="generateBtn">Generar Cartón</button>
+</div>
+
+<div id="bingo-section">
+  <div id="player-name"></div>
+  <div id="fun-phrase"></div>
+  <div id="bingo-grid"></div>
+  <div id="bingo-message">BINGO 🎉🎉🎉</div>
+</div>
+
+<div id="stickers">
+  <img src="https://em-content.zobj.net/thumbs/240/apple/354/pink-heart_1f496.png" alt="sticker" class="sticker" />
+  <img src="https://em-content.zobj.net/thumbs/240/apple/354/party-popper_1f389.png" alt="sticker" class="sticker" />
+  <img src="https://em-content.zobj.net/thumbs/240/apple/354/musical-note_1f3b5.png" alt="sticker" class="sticker" />
+</div>
+
+<script>
+const canciones = [
+  "Baby One More Time - Brytney Spears", "Ocho Caurenta - Rodrigo", "Arabe - ECKO", "Obsesion - Aventura", "Limbo - Daddy Yankee",
+	"La Cumbita- Tambo Tambo", "No me arrepiento de este amor - Gilda", "Jurabas Tu - Los del fuego", "Perdoname - La factoria",
+	"El Taxi - Pitbull", "El Bombon - Los palmeras", "Amiga Traidora - Angela Leiva", "Propuesta Indecente - Romeo Santos", "Niña Bonita - Chino y Ncho",
+	"Shake It Off - Taylor Swift", "Flores Amarillas - Floricienta", "La tonta - Jimena", "Olvidame y pega la vuelta - Pimpinela", "Waka Waka - Shakira",
+	"Es un secreto - Plan B", "Loba - Shakira", "Baby - Justin Bieber", "She Dont Gve a Fo - Duki", "Atrevete - Calle 13", "Colgando en tus manos - Carlos Baute",
+	"Yo te esperare - Cali y El Dandee", "No se ve mp3 - Emilia", "Borro Cassette - Maluma", "Te amo - Makano", "Te pintaron pajaritos - Andy Rivera",
+	"Sabado Rebelde - Daddy Yankee", "Where She Goes - Bad Bunny", "Mi vecinita - Plan B", "Soy Peor - Remix", "Hey Jessi! - Debby Ryan", "Un poco loco - Coco",
+	"Blank Space - Taylor Swift", "Baila Morena - Hector y Tito", "Chantaje - Maluma", "Felices los 4 - Maluma", "Perro Negro - Bad Bunny", "Corre - Jessy y  Joy",
+	"Mucha Data - Cazzu", "Se parece mas a ti - Jambao", "Me gustas tu - Manu Chao", "Putita - Babasonicos", "Un osito de peluche en Taiwan - Los Autenticos",
+	"Pose - Daddy Yankee", "Hay otro en mi vida - La factoria", "Mi vestido azul - Floricienta", "Dile a el - Rauw Alejandro", "Ai se eu te pego - Michel Telo",
+	"Ella y Yo - Don Omar", "Que pasaria... - Rauw Alejandro", "Persiana Americana - Agapornis", "Chica Brasileña - El super Jobby", "6am - J Balbin", "BlackOut - Emilia",
+	"Callaita - Bad Bunny", "Si te dejas llevar - Ozuna", "Mi nena facebook - Los nota lokos", "Me entere - Thiago PZK", "La Original - Emilia", "Hola Perdida - Luckra",
+	"La morocha - Luckra", "Choca - Plan B", "Arabe - Ecko", "Llamame mas temprano - Manos Arriba"];
+
+const frases = [
+  "¿Ya cantaste esa canción en la ducha?",
+  "Si haces bingo, ¡bailamos todos!",
+  "¿Seguro que esa canción estaba en tu cartón?",
+  "No te olvides de cantar a todo pulmón.",
+  "¿Alguna canción te trae recuerdos?",
+  "¡A ganar!",
+  "¡Alerta! Esto puede causar mucho baile.",
+  "No hagas trampa, el DJ te está mirando.",
+  "¿Listo para hacer BINGO y ganar?",
+  "Si haces bingo, nos debes un bailecito."
+];
+
+const playerNameInput = document.getElementById("playerName");
+const generateBtn = document.getElementById("generateBtn");
+const formSection = document.getElementById("form-section");
+const bingoSection = document.getElementById("bingo-section");
+const playerNameDisplay = document.getElementById("player-name");
+const funPhrase = document.getElementById("fun-phrase");
+const bingoGrid = document.getElementById("bingo-grid");
+const bingoMessage = document.getElementById("bingo-message");
+
+function generarCarton() {
+  let name = playerNameInput.value.trim();
+  if (!name) {
+    alert("Por favor ingresa tu nombre para jugar.");
+    return;
+  }
+  formSection.style.display = "none";
+  bingoSection.style.display = "block";
+  playerNameDisplay.textContent = `¡Hola, ${name}! 🎶`;
+  funPhrase.textContent = frases[Math.floor(Math.random() * frases.length)];
+
+  let cancionesElegidas = [];
+  let copiaCanciones = [...canciones];
+  while (cancionesElegidas.length < 24 && copiaCanciones.length > 0) {
+    let idx = Math.floor(Math.random() * copiaCanciones.length);
+    cancionesElegidas.push(copiaCanciones.splice(idx, 1)[0]);
+  }
+
+  bingoGrid.innerHTML = "";
+
+  for (let i = 0; i < 25; i++) {
+    const cell = document.createElement("div");
+    cell.classList.add("cell");
+    if (i === 12) {
+      cell.classList.add("free");
+      cell.textContent = "🎁 Espacio Libre";
+    } else {
+      const song = cancionesElegidas.shift();
+      cell.textContent = song;
+      cell.addEventListener("click", () => {
+        cell.classList.toggle("selected");
+        verificarBingo();
+      });
+    }
+    bingoGrid.appendChild(cell);
+  }
+}
+
+function verificarBingo() {
+  const cells = document.querySelectorAll(".cell");
+  let bingo = true;
+  for (let i = 0; i < 5; i++) {
+    let rowComplete = true;
+    for (let j = 0; j < 5; j++) {
+      const index = i * 5 + j;
+      if (index === 12) continue;
+      if (!cells[index].classList.contains("selected")) {
+        rowComplete = false;
+        break;
+      }
+    }
+    if (!rowComplete) {
+      bingo = false;
+      break;
+    }
+  }
+  if (bingo) bingoMessage.style.display = "block";
+}
+
+generateBtn.addEventListener("click", generarCarton);
+</script>
+
+</body>
+</html>
